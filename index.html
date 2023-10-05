@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotteryApp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F0F0F0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        .header {
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+        }
+        .lottery-container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+        }
+        .lottery-numbers {
+            display: flex;
+            justify-content: center;
+        }
+        .lottery-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            position: relative;
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+        .lottery-number::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 70%);
+        }
+        #current-date {
+            background-color: transparent;
+            display: inline-block;
+            cursor: pointer;
+            font-size: 20px;
+            margin-top: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        #recommendation-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF5733;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>LotteryApp</h1>
+    </div>
+    <div class="lottery-container">
+        <!-- Texto de recomendaciones diarias -->
+        <p><span id="recommendation-text">Recomendación para hoy:</span> <span id="current-date"></span></p>
+        <!-- Números de recomendación -->
+        <div class="lottery-numbers">
+            <div class="lottery-number">08</div>
+            <div class="lottery-number">15</div>
+            <div class="lottery-number">24</div>
+        </div>
+    </div>
+    
+    <script>
+        // Obtenemos la fecha actual del sistema en formato "ddd/mmm/aaaa"
+        const currentDate = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+        const formattedDate = currentDate.toLocaleDateString('es-ES', options);
+
+        // Mostramos la fecha actual en el elemento span
+        const currentDateElement = document.getElementById('current-date');
+        if (currentDateElement) {
+            currentDateElement.textContent = formattedDate;
+        }
+
+        // Recuperamos los números de recomendación almacenados en el LocalStorage
+        const storedRecommendations = localStorage.getItem('recommendations');
+
+        // Verificamos si hay números almacenados y los mostramos
+        if (storedRecommendations) {
+            try {
+                const recommendations = JSON.parse(storedRecommendations);
+                const lotteryNumbers = document.querySelectorAll('.lottery-number');
+                lotteryNumbers[0].textContent = recommendations.number1 || '08';
+                lotteryNumbers[1].textContent = recommendations.number2 || '15';
+                lotteryNumbers[2].textContent = recommendations.number3 || '24';
+            } catch (error) {
+                console.error('Error al parsear los números de recomendación:', error);
+            }
+        }
+    </script>
+</body>
+</html>
